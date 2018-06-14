@@ -8,15 +8,18 @@
 (defvar etw-kp-buf "")
 
 (defun etw-keypress (k)
-  (if (and (listp (key-binding (kbd k)))
-           (equal (car (key-binding (kbd k))) 'keymap))
+  (let ((chain (if (> (length etw-kp-buf) 0)
+                   (format "%s %s" etw-kp-buf k)
+                 k)))
+    (if (and (listp (key-binding (kbd chain)))
+             (equal (car (key-binding (kbd chain))) 'keymap))
+        (progn
+          (setf etw-kp-buf (format "%s %s" etw-kp-buf k))
+          (message "hmmm"))
       (progn
-        (setf etw-kp-buf (format "%s %s" etw-kp-buf k))
-        (message "hmmm"))
-    (progn
-      (etw-keypress-do (if (> (length etw-kp-buf) 0) (format "%s%s" etw-kp-buf k) k))
-      (setf etw-kp-buf "")
-      )))
+        (etw-keypress-do chain)
+        (setf etw-kp-buf "")
+        ))))
 
 (defun etw-bl-join (a b) (format "%s,%s" a b))
 
