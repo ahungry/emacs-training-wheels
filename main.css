@@ -1,0 +1,20 @@
+html, body {
+  background: #222;
+  color: #fff;
+  font-family: Iosevka, Terminus, Consolas, monospace;
+}
+
+#eval {
+  display: block;
+  height: 30px;
+  overflow: scroll;
+}
+
+#buff a {
+  background: #000;
+  border-radius: 4px;
+  color: lime;
+  display: inline-block;
+  margin: 4px;
+  padding: 3px;
+}
