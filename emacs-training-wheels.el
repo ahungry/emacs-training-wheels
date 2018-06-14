@@ -1,10 +1,22 @@
 (require 'websocket)
 
 
-(defun etw-keypress (k)
-  (interactive)
+(defun etw-keypress-do (k)
   (cond ((equal (key-binding (kbd k)) #'self-insert-command) (insert (if (equal k "SPC") " " k)))
         (t (call-interactively (key-binding (kbd k))))))
+
+(defvar etw-kp-buf "")
+
+(defun etw-keypress (k)
+  (if (and (listp (key-binding (kbd k)))
+           (equal (car (key-binding (kbd k))) 'keymap))
+      (progn
+        (setf etw-kp-buf (format "%s %s" etw-kp-buf k))
+        (message "hmmm"))
+    (progn
+      (etw-keypress-do (if (> (length etw-kp-buf) 0) (format "%s%s" etw-kp-buf k) k))
+      (setf etw-kp-buf "")
+      )))
 
 (defun etw-bl-join (a b) (format "%s,%s" a b))
 

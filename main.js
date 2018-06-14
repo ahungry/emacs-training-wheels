@@ -60,12 +60,31 @@ function buff () {
 const kp = (e) => {
   var key = e.key
 
+  // Don't send these
+  if (key === 'Control') return
+  if (key === 'Meta') return
+  if (key === 'Alt') return
+
   switch (true) {
     case e.code === 'Space': key = 'SPC'; break
     case e.code === 'Enter': key = 'RET'; break
     case e.code === 'Backspace': key = 'DEL'; break
+    case e.code === 'ArrowDown': key = '<down>'; break
+    case e.code === 'ArrowUp': key = '<up>'; break
+    case e.code === 'ArrowLeft': key = '<left>'; break
+    case e.code === 'ArrowRight': key = '<right>'; break
     case e.key === 'Escape': key = '<escape>'; break
   }
+
+  if (e.ctrlKey === true && key[0] !== '<') {
+    key = 'C-' + key
+  }
+
+  if (e.ctrlKey === true && key[0] === '<') {
+    key = '<C-' + key.slice(1)
+  }
+
+  console.log('Sending key: ', key)
 
   // full buffer
   // var cmd = `(progn (etw-keypress "${key}") (buffer-substring (point-min) (point-max)))`
